@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Long Term Sustainability with Climate Risk</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:ital,wght@0,600;1,400&display=swap');
+  body { font-family: 'Inter', sans-serif; background: #f0f4f8; }
+  h1, .display { font-family: 'Fraunces', serif; }
+  input[type=range] { accent-color: #1a3a5c; width: 100%; }
+  .toggle-3 { display: flex; border-radius: 8px; overflow: hidden; border: 1px solid #cbd5e1; }
+  .toggle-3 button { flex: 1; padding: 6px 8px; background: #f8fafc; color: #64748b; font-size: 13px; font-weight: 500; border: none; cursor: pointer; transition: all 0.15s; }
+  .toggle-3 button:hover { background: #e2e8f0; }
+  .toggle-3 button.active { background: #1a3a5c; color: #fff; }
+  .toggle-2 { display: flex; border-radius: 8px; overflow: hidden; border: 1px solid #cbd5e1; }
+  .toggle-2 button { flex: 1; padding: 6px 10px; background: #f8fafc; color: #64748b; font-size: 13px; font-weight: 500; border: none; cursor: pointer; transition: all 0.15s; }
+  .toggle-2 button.active-comm { background: #166534; color: #fff; }
+  .toggle-2 button.active-fund { background: #1e40af; color: #fff; }
+  .scenario-btn { transition: transform 0.15s; cursor: pointer; }
+  .scenario-btn:hover { transform: translateY(-2px); }
+  .val-badge { font-size: 13px; font-weight: 600; background: #dbeafe; color: #1e3a8a; padding: 2px 10px; border-radius: 20px; white-space: nowrap; }
+  table.detail { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.detail th { padding: 8px 10px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; border-bottom: 2px solid #e2e8f0; text-align: center; }
+  table.detail th:first-child { text-align: left; }
+  table.detail td { padding: 7px 10px; border-bottom: 1px solid #e2e8f0; text-align: center; }
+  table.detail td:first-child { text-align: left; font-weight: 500; }
+  .row-comm { background: #f0fdf4; }
+  .row-comm-net { background: #bbf7d0; font-weight: 700; }
+  .row-fund { background: #eff6ff; }
+  .row-fund-net { background: #bfdbfe; font-weight: 700; }
+  .row-total { background: #e2e8f0; font-weight: 700; font-size: 15px; }
+  .neg { color: #dc2626; font-weight: 700; }
+  .pos { color: #15803d; }
+  [contenteditable]:focus { outline: 2px solid #3b82f6; border-radius: 4px; }
+</style>
+</head>
+<body x-data="dashApp()">
+
+<div class="max-w-5xl mx-auto px-4 py-6 space-y-6">
+
+  <!-- 1. TITLE -->
+  <header class="bg-gradient-to-r from-slate-800 to-slate-700 text-white rounded-2xl px-8 py-6 shadow-lg">
+    <h1 class="text-3xl font-semibold tracking-tight">Long Term Sustainability with Climate Risk</h1>
+  </header>
+
+  <!-- 2. YES/NO BOXES -->
+  <div class="grid grid-cols-3 gap-4">
+    <!-- Main verdict -->
+    <div class="col-span-2 rounded-2xl shadow p-5" :class="overallYes ? 'bg-green-600' : 'bg-red-500'">
+      <div class="text-sm font-semibold uppercase tracking-wider text-white opacity-80 mb-2">Does the adaptation package add up?</div>
+      <div class="text-5xl font-bold text-white mb-4" x-text="overallYes ? 'YES' : 'NO'"></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="rounded-xl p-3" :class="communityYes ? 'bg-green-700' : 'bg-red-600'">
+          <div class="text-xs text-white opacity-75 uppercase tracking-wider mb-1">Community</div>
+          <div class="text-xl font-bold text-white" x-text="communityYes ? 'YES' : 'NO'"></div>
+          <div class="text-xs text-white opacity-75 mt-1">Expected income (Agro+AA): <span class="font-bold" x-text="'¤'+evAgroAA.toFixed(1)"></span> vs <span class="font-bold" x-text="'¤'+evConvNoAA.toFixed(1)"></span></div>
+        </div>
+        <div class="rounded-xl p-3" :class="funderYes ? 'bg-green-700' : 'bg-red-600'">
+          <div class="text-xs text-white opacity-75 uppercase tracking-wider mb-1">Funder</div>
+          <div class="text-xl font-bold text-white" x-text="funderYes ? 'YES' : 'NO'"></div>
+          <div class="text-xs text-white opacity-75 mt-1">Bad year net without AA transfer: <span class="font-bold" x-text="'¤'+agroNoAABad.toFixed(1)"></span> → with: <span class="font-bold" x-text="'¤'+agroWithAABad.toFixed(1)"></span></div>
+        </div>
+      </div>
+    </div>
+    <!-- Sustainability -->
+    <div class="rounded-2xl shadow p-5 flex flex-col justify-between" :class="sustainYes ? 'bg-green-600' : 'bg-red-500'">
+      <div>
+        <div class="text-sm font-semibold uppercase tracking-wider text-white opacity-80 mb-2">Is the AA program sustainable?</div>
+        <div class="text-5xl font-bold text-white mb-3" x-text="sustainYes ? 'YES' : 'NO'"></div>
+      </div>
+      <div class="text-sm text-white opacity-80">
+        Bad year net (Agro + AA): <span class="font-bold" x-text="'¤'+agroWithAABad.toFixed(1)"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. SYNOPSIS -->
+  <div class="bg-white rounded-2xl shadow p-5">
+    <div class="mb-3">
+      <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Program context</div>
+    </div>
+    <div class="text-slate-700 text-base leading-relaxed border-l-4 border-slate-300 pl-4" contenteditable="true" x-text="synopsisText[program]"></div>
+  </div>
+
+  <!-- 3. SCENARIOS -->
+  <div class="bg-white rounded-2xl shadow p-5 space-y-3">
+    <div>
+      <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Scenario explorer</div>
+      <p class="text-sm text-slate-500">Use these buttons to explore how different conditions affect the outcome. Each scenario changes one variable at a time.</p>
+    </div>
+    <div class="grid grid-cols-4 gap-3">
+      <button @click="loadBase('baseline')" class="scenario-btn bg-slate-50 border border-slate-300 rounded-xl p-3 text-left">
+        <div class="text-sm font-bold text-slate-700 mb-1">Baseline</div>
+        <div class="text-xs text-slate-500">Reset all parameters to default values</div>
+      </button>
+      <button @click="applyModifier('climate')" class="scenario-btn bg-amber-50 border border-amber-200 rounded-xl p-3 text-left">
+        <div class="text-sm font-bold text-amber-800 mb-1">Increasing climate risk</div>
+        <div class="text-xs text-amber-600">Raises bad year probability</div>
+      </button>
+      <button @click="applyModifier('aa')" class="scenario-btn bg-blue-50 border border-blue-200 rounded-xl p-3 text-left">
+        <div class="text-sm font-bold text-blue-800 mb-1">Stronger AA support</div>
+        <div class="text-xs text-blue-600">Increases AA transfer amount</div>
+      </button>
+      <button @click="applyModifier('land')" class="scenario-btn bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-left">
+        <div class="text-sm font-bold text-emerald-800 mb-1">More land conversion</div>
+        <div class="text-xs text-emerald-600">Increases land in conservation</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- 5. DESCRIPTION + SLIDERS -->
+  <div class="bg-white rounded-2xl shadow p-5">
+    <div class="grid grid-cols-2 gap-8">
+
+      <!-- LEFT: descriptions -->
+      <div class="space-y-6 text-slate-600 text-sm leading-relaxed">
+
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Conservation System</div>
+          <div class="space-y-4">
+            <p><span class="font-semibold text-slate-700">Land converted to conservation.</span>
+              <span x-show="program==='agro'"> Part of the farmer's land is converted to agroforestry. This is the farmer's main contribution to the program. The more land they convert, the less they grow in crops.</span>
+              <span x-show="program==='mangrove'"> Part of the community's land is dedicated to mangrove restoration. This is the community's main contribution to the program. The more land protected, the greater the buffer against storms and floods.</span>
+              <span x-show="program==='rangeland'"> Part of the pastoralist's rangeland is set aside for sustainable management. This is their main contribution to the program. Better managed land builds long-term productivity.</span>
+            </p>
+            <p><span class="font-semibold text-slate-700">Conservation system income (good year).</span>
+              <span x-show="program==='agro'"> In a good year, the agroforestry system earns the farmer this much income.</span>
+              <span x-show="program==='mangrove'"> In a good year, healthy mangroves support strong fish populations and stable fishing income.</span>
+              <span x-show="program==='rangeland'"> In a good year, well managed rangeland supports healthy herds and strong income for the pastoralist.</span>
+            </p>
+            <p><span class="font-semibold text-slate-700">Conservation system income (bad year).</span>
+              <span x-show="program==='agro'"> In a bad year, crops often fail but the forest keeps producing. This is how much income the farmer can still count on from their agroforestry land.</span>
+              <span x-show="program==='mangrove'"> In a bad year, healthy mangroves protect the household from storms and floods while keeping fish populations stable. This is how much the system still provides when a bad year hits.</span>
+              <span x-show="program==='rangeland'"> In a bad year, managed rangeland maintains herd productivity better than degraded land. This is how much income the pastoralist can still count on when a bad year hits.</span>
+            </p>
+            <p><span class="font-semibold text-slate-700">
+      <span x-show="program==='agro'">Farmer income (good year).</span>
+      <span x-show="program==='mangrove'">Fishing income (good year).</span>
+      <span x-show="program==='rangeland'">Pastoralism income (good year).</span>
+    </span>
+              <span x-show="program==='agro'"> This is what the farmer earns from their crops in a good year.</span>
+              <span x-show="program==='mangrove'"> This is what the fisher earns from fishing in a good year.</span>
+              <span x-show="program==='rangeland'"> This is what the pastoralist earns from their herd in a good year.</span>
+            </p>
+            <p><span class="font-semibold text-slate-700">
+      <span x-show="program==='agro'">Farmer income (bad year).</span>
+      <span x-show="program==='mangrove'">Fishing income (bad year).</span>
+      <span x-show="program==='rangeland'">Pastoralism income (bad year).</span>
+    </span>
+              <span x-show="program==='agro'"> This is what the farmer earns from their crops when a bad year hits.</span>
+              <span x-show="program==='mangrove'"> This is what the fisher earns from fishing when a bad year hits.</span>
+              <span x-show="program==='rangeland'"> This is what the pastoralist earns from their herd when a bad year hits.</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="border-t pt-4">
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Outside Labor & Income</div>
+          <p><span class="font-semibold text-slate-700">Outside income.</span>
+            <span x-show="program==='agro'"> Some households earn extra income outside of farming. If this comes from the farmer's own work it strengthens their household. If it comes from a funder it is part of the program cost.</span>
+            <span x-show="program==='mangrove'"> Some households earn extra income outside of fishing. If this comes from the household's own work it strengthens their resilience. If it comes from a funder it is part of the program cost.</span>
+            <span x-show="program==='rangeland'"> Some households earn extra income outside of herding. If this comes from the pastoralist's own work it strengthens their household. If it comes from a funder it is part of the program cost.</span>
+          </p>
+        </div>
+
+        <div class="border-t pt-4">
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">AA Program</div>
+          <p><span class="font-semibold text-slate-700">Bad year AA support.</span> When a bad year is triggered, the household receives this amount as direct support from the program.</p>
+          <p class="mt-3"><span class="font-semibold text-slate-700">AA program cost.</span> This is what it costs the funder to run the program, set as a percentage of the transfer amount.</p>
+        </div>
+
+        <div class="border-t pt-4">
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Probabilities</div>
+          <p><span class="font-semibold text-slate-700">Bad year probability.</span> This is how often a bad year is expected to happen. You can update this based on local data.
+            <span x-show="program==='agro'"> Communities in Manakara reported 6 out of 10 bad years over the past decade.</span>
+            <span x-show="program==='mangrove'"> Communities in Toliara II reported 5 out of 10 bad years over the past decade.</span>
+            <span x-show="program==='rangeland'"> Communities in Toliara I reported 7 out of 10 bad years over the past decade.</span>
+          </p>
+          <p class="mt-3"><span class="font-semibold text-slate-700">AA support failure rate.</span> Sometimes the program does not trigger even in a bad year. This is how often that happens.</p>
+        </div>
+      </div>
+
+      <!-- RIGHT: sliders -->
+      <div class="space-y-6">
+
+        <!-- Farming System -->
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Farming System</div>
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between mb-1"><span class="text-sm text-slate-600">Land converted to conservation</span><span class="val-badge" x-text="Math.round(landPct*100)+'%'"></span></div>
+              <input type="range" min="0" max="1" step="0.01" x-model.number="landPct">
+            </div>
+            <div>
+              <div class="flex justify-between mb-1"><span class="text-sm text-slate-600">Conservation system income (good year)</span><span class="val-badge" x-text="'¤'+agroYieldGood"></span></div>
+              <input type="range" min="0" max="200" step="5" x-model.number="agroYieldGood">
+            </div>
+            <div>
+              <div class="flex justify-between mb-1"><span class="text-sm text-slate-600">Conservation system income (bad year)</span><span class="val-badge" x-text="'¤'+agroYieldBad"></span></div>
+              <input type="range" min="0" max="200" step="5" x-model.number="agroYieldBad">
+            </div>
+            <div>
+              <div class="flex justify-between mb-1"><span class="text-sm text-slate-600">
+  <span x-show="program==='agro'">Farmer income (good year)</span>
+  <span x-show="program==='mangrove'">Fishing income (good year)</span>
+  <span x-show="program==='rangeland'">Pastoralism income (good year)</span>
+</span><span class="val-badge" x-text="'¤'+cropYieldGood"></span></div>
+              <input type="range" min="0" max="200" step="5" x-model.number="cropYieldGood">
+            </div>
+            <div>
+              <div class="flex justify-between mb-1"><span class="text-sm text-slate-600">
+  <span x-show="program==='agro'">Farmer income (bad year)</span>
+  <span x-show="program==='mangrove'">Fishing income (bad year)</span>
+  <span x-show="program==='rangeland'">Pastoralism income (bad year)</span>
+</span><span class="val-badge" x-text="'¤'+cropYieldBad"></span></div>
+              <input type="range" min="0" max="200" step="5" x-model.number="cropYieldBad">
+            </div>
+          </div>
+        </div>
+
+        <!-- Outside Labor & Income -->
+        <div class="border-t pt-4">
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Outside Labor & Income</div>
+          <div>
+            <div class="flex justify-between mb-1"><span class="text-sm text-slate-600">Outside income</span><span class="val-badge" x-text="'¤'+outsideIncome"></span></div>
+            <input type="range" min="0" max="60" step="1" x-model.number="outsideIncome">
+            <div class="mt-2">
+              <div class="toggle-2">
+                <button @click="outsideIncomePayer='community'" :class="outsideIncomePayer==='community' ? 'active-comm' : ''">Farmer earns</button>
+                <button @click="outsideIncomePayer='funder'" :class="outsideIncomePayer==='funder' ? 'active-fund' : ''">Funder provides</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AA Program -->
+        <div class="border-t pt-4">
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">AA Program</div>
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between mb-1"><span class="text-sm text-slate-600">Bad year AA support</span><span class="val-badge" x-text="'¤'+aaSupport"></span></div>
+              <input type="range" min="0" max="100" step="1" x-model.number="aaSupport">
+            </div>
+            <div>
+              <div class="flex justify-between mb-1"><span class="text-sm text-slate-600">AA program cost <span class="text-slate-400 text-xs">(<span x-text="aaCostPct+'%'"></span> of support)</span></span><span class="val-badge" x-text="'¤'+aaProgramCost.toFixed(1)"></span></div>
+              <input type="range" min="0" max="100" step="1" x-model.number="aaCostPct">
+              <div class="mt-2">
+                <div class="toggle-2">
+                  <button @click="aaPayer='community'" :class="aaPayer==='community' ? 'active-comm' : ''">Community pays</button>
+                  <button @click="aaPayer='agency'" :class="aaPayer==='agency' ? 'active-fund' : ''">Agency pays</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Probabilities -->
+        <div class="border-t pt-4">
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Probabilities</div>
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-sm text-slate-600">Bad year probability</span>
+                <span class="val-badge" x-text="probBad.toFixed(2)"></span>
+              </div>
+              <input type="range" min="0" max="1" step="0.01" x-model.number="probBad">
+            </div>
+            <div>
+              <div class="flex justify-between mb-1"><span class="text-sm text-slate-600">AA support failure rate</span><span class="val-badge" x-text="probFailure.toFixed(2)"></span></div>
+              <input type="range" min="0" max="1" step="0.01" x-model.number="probFailure">
+            </div>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="border-t pt-4">
+          <button class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl uppercase tracking-widest text-sm">Simulate Strategy</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. FUNDER METRICS + SUMMARY TABLE -->
+  <div class="bg-white rounded-2xl shadow p-5 space-y-4">
+    <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Funder metrics</div>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="bg-slate-50 rounded-xl p-4 text-center">
+        <div class="text-xs uppercase tracking-wider text-slate-400 mb-1">AA program cost</div>
+        <div class="text-2xl font-bold text-slate-700" x-text="'¤'+aaProgramCost.toFixed(1)"></div>
+        <div class="text-xs text-slate-400 mt-1">per household / year</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4 text-center">
+        <div class="text-xs uppercase tracking-wider text-slate-400 mb-1">Expected transfer paid out</div>
+        <div class="text-2xl font-bold text-slate-700" x-text="'¤'+expectedTransfer.toFixed(1)"></div>
+        <div class="text-xs text-slate-400 mt-1">per household / year</div>
+      </div>
+    </div>
+
+    <div class="border-t pt-4">
+      <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Summary table</div>
+      <table class="detail">
+        <thead>
+          <tr>
+            <th>Strategy</th>
+            <th>Expected value</th>
+            <th>Good year</th>
+            <th>Bad year</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="row in summaryRows" :key="row.name">
+            <tr class="hover:bg-slate-50">
+              <td x-text="row.name"></td>
+              <td class="font-bold text-blue-800" x-text="'¤'+row.ev.toFixed(1)"></td>
+              <td x-text="'¤'+row.good.toFixed(1)"></td>
+              <td :class="row.bad < 0 ? 'neg' : ''" x-text="'¤'+row.bad.toFixed(1)"></td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 7. 2x2 TABLES -->
+  <div class="grid grid-cols-2 gap-4">
+    <template x-for="(bm, bmIndex) in businessModels" :key="bmIndex">
+      <div class="bg-white rounded-2xl shadow p-4">
+        <div class="text-sm font-bold px-3 py-2 rounded-lg mb-3 text-white" :class="bm.type==='agro' ? 'bg-emerald-800' : 'bg-slate-700'" x-text="bm.title"></div>
+        <table class="detail">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Good year</th>
+              <th>Bad year</th>
+              <th>Failed AA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template x-for="(row, rowIndex) in bm.rows" :key="rowIndex">
+              <tr :class="{
+                'row-comm': row.color==='community' && !row.isNet,
+                'row-comm-net': row.color==='community' && row.isNet,
+                'row-fund': row.color==='funder' && !row.isNet,
+                'row-fund-net': row.color==='funder' && row.isNet,
+                'row-total': row.color==='total'
+              }">
+                <td x-text="row.item"></td>
+                <td x-text="row.good"></td>
+                <td :class="row.badNeg ? 'neg' : ''" x-text="row.bad"></td>
+                <td x-text="row.basis !== null && row.basis !== undefined ? row.basis : '—'"></td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </template>
+  </div>
+
+</div>
+
+<script>
+function dashApp() {
+  return {
+    // Sliders
+    landPct: 0.20,
+    agroYieldGood: 60,
+    agroYieldBad: 20,
+    cropYieldGood: 100,
+    cropYieldBad: 0,
+    outsideIncome: 10,
+    outsideIncomePayer: 'community',
+    aaSupport: 30,
+    aaCostPct: 40,
+    aaPayer: 'agency',
+    probBad: 0.60,
+    probFailure: 0.22,
+    program: 'agro',
+    programProbBad: { agro: 0.60, mangrove: 0.50, rangeland: 0.70 },
+    activeBase: 'baseline',
+    scenarioAName: 'Scenario A',
+    scenarioBName: 'Scenario B',
+    savedA: null,
+    savedB: null,
+
+    synopsisText: {
+      agro: 'In this program, farmers convert part of their land to agroforestry. Their crops still grow on the rest of the land, and the forest provides an additional source of income that holds up better during bad years. The AA program provides direct financial support when a bad year is triggered, helping households get through bad years without selling assets.',
+      mangrove: 'In this program, fishing communities dedicate land to restoring and protecting mangrove ecosystems. Healthy mangroves protect households from storms and floods while keeping fish populations stable. The AA program provides direct financial support when a bad year is triggered, helping households get through bad years without selling assets.',
+      rangeland: 'In this program, pastoralist communities manage their rangeland more sustainably, reducing overgrazing and improving long-term productivity. Better managed land maintains herd income even in difficult years. The AA program provides direct financial support when a bad year is triggered, helping households get through bad years without selling livestock.'
+    },
+
+    // Computed
+    get aaProgramCost() { return this.aaSupport * this.aaCostPct / 100; },
+    get communityAACost() { return this.aaPayer === 'community' ? this.aaProgramCost : 0; },
+    get expectedTransfer() { return this.aaSupport * this.probBad * (1 - this.probFailure); },
+
+    get convRevGood() { return this.cropYieldGood; },
+    get convRevBad()  { return this.cropYieldBad; },
+    get agroRevGood() { return (this.landPct * this.agroYieldGood) + ((1 - this.landPct) * this.cropYieldGood); },
+    get agroRevBad()  { return (this.landPct * this.agroYieldBad)  + ((1 - this.landPct) * this.cropYieldBad); },
+
+    get oi() { return this.outsideIncome; },
+    get oiComm() { return this.outsideIncome; },
+    get oiFund() { return this.outsideIncomePayer === 'funder' ? this.outsideIncome : 0; },
+
+    // S1: Conventional, no AA
+    get s1Good() { return this.convRevGood + this.oiComm; },
+    get s1Bad()  { return this.convRevBad  + this.oiComm; },
+    get evConvNoAA() { return (1-this.probBad)*this.s1Good + this.probBad*this.s1Bad; },
+
+    // S2: Conventional, with AA
+    get s2Good() { return this.convRevGood + this.oiComm; },
+    get s2Bad()  { return this.convRevBad  + this.oiComm + this.aaSupport; },
+    get s2Fail() { return this.convRevBad  + this.oiComm; },
+    get evConvAA() { return (1-this.probBad)*this.s2Good + this.probBad*((1-this.probFailure)*this.s2Bad + this.probFailure*this.s2Fail); },
+
+    // S3: Agroforestry, no AA
+    get s3Good() { return this.agroRevGood + this.oiComm; },
+    get s3Bad()  { return this.agroRevBad  + this.oiComm; },
+    get evAgroNoAA() { return (1-this.probBad)*this.s3Good + this.probBad*this.s3Bad; },
+
+    // S4: Agroforestry, with AA
+    get s4Good() { return this.agroRevGood + this.oiComm; },
+    get s4Bad()  { return this.agroRevBad  + this.oiComm + this.aaSupport; },
+    get s4Fail() { return this.agroRevBad  + this.oiComm; },
+    get evAgroAA() { return (1-this.probBad)*this.s4Good + this.probBad*((1-this.probFailure)*this.s4Bad + this.probFailure*this.s4Fail); },
+
+    get communityYes() { return this.evAgroAA > this.evConvNoAA; },
+    get agroNoAABad()   { return this.s3Bad; },
+    get agroWithAABad() { return this.s4Bad; },
+    get funderYes() { return this.agroNoAABad >= 0 || this.agroWithAABad >= 0; },
+    get overallYes() { return this.communityYes && this.funderYes; },
+    get sustainYes() { return this.s4Bad >= 0; },
+
+    get summaryRows() {
+      return [
+        { name: 'Conventional farming, no AA',  ev: this.evConvNoAA, good: this.s1Good, bad: this.s1Bad },
+        { name: 'Conventional farming, with AA', ev: this.evConvAA,   good: this.s2Good, bad: this.s2Bad },
+        { name: 'Agroforestry, no AA',           ev: this.evAgroNoAA, good: this.s3Good, bad: this.s3Bad },
+        { name: 'Agroforestry, with AA',         ev: this.evAgroAA,   good: this.s4Good, bad: this.s4Bad },
+      ];
+    },
+
+    fmt(v) { return '¤' + v.toFixed(1); },
+
+    buildRows(cropRevG, cropRevB, agroRevG, agroRevB, isAgro, aaSup, oiComm, oiFund) {
+      const revG = isAgro ? agroRevG : cropRevG;
+      const revB = isAgro ? agroRevB : cropRevB;
+      const revF = revB;
+      const cAACost = this.communityAACost;
+      const commNetG = (isAgro ? agroRevG : cropRevG) + oiComm - cAACost;
+      const commNetB = (isAgro ? agroRevB : cropRevB) + oiComm - cAACost + aaSup;
+      const commNetF = (isAgro ? agroRevB : cropRevB) + oiComm - cAACost;
+      const funderCost = this.aaPayer === 'agency' ? this.aaProgramCost : 0;
+      const funderNetB = -funderCost - oiFund;
+      const totalG = commNetG + (-funderCost - oiFund);
+      const totalB = commNetB + (-funderCost - oiFund);
+      const totalF = commNetF + (-funderCost - oiFund);
+      const rows = [];
+      rows.push({ item: 'Crop revenue',         good: this.fmt(cropRevG),  bad: this.fmt(cropRevB),  badNeg: cropRevB<0, basis: this.fmt(cropRevB), color: 'community' });
+      if (isAgro) rows.push({ item: 'Agroforestry income', good: this.fmt(agroRevG - cropRevG), bad: this.fmt(agroRevB - cropRevB), badNeg: false, basis: this.fmt(agroRevB - cropRevB), color: 'community' });
+      rows.push({ item: 'Outside income', good: this.fmt(oiComm), bad: this.fmt(oiComm), badNeg: false, basis: this.fmt(oiComm), color: 'community' });
+      rows.push({ item: 'AA transfer received', good: this.fmt(0), bad: this.fmt(aaSup), badNeg: false, basis: this.fmt(0), color: 'community' });
+      if (cAACost > 0) rows.push({ item: 'AA program cost (community)', good: this.fmt(-cAACost), bad: this.fmt(-cAACost), badNeg: false, basis: this.fmt(-cAACost), color: 'community' });
+      rows.push({ item: 'Community net',        good: this.fmt(commNetG), bad: this.fmt(commNetB), badNeg: commNetB<0, basis: this.fmt(commNetF), isNet: true, color: 'community' });
+      if (funderCost > 0) rows.push({ item: 'AA program cost (agency)', good: this.fmt(-funderCost), bad: this.fmt(-funderCost), badNeg: false, basis: this.fmt(-funderCost), color: 'funder' });
+      if (oiFund > 0) rows.push({ item: 'Outside income (funder cost)', good: this.fmt(-oiFund), bad: this.fmt(-oiFund), badNeg: false, basis: this.fmt(-oiFund), color: 'funder' });
+      rows.push({ item: 'Funder net',           good: this.fmt(-funderCost - oiFund), bad: this.fmt(funderNetB), badNeg: funderNetB<0, basis: this.fmt(-funderCost - oiFund), isNet: true, color: 'funder' });
+      rows.push({ item: 'TOTAL',                good: this.fmt(totalG), bad: this.fmt(totalB), badNeg: totalB<0, basis: aaSup > 0 ? this.fmt(totalF) : null, isNet: true, color: 'total' });
+      return rows;
+    },
+
+    get businessModels() {
+      return [
+        { title: 'Conventional farming — no AA',   type: 'conv', rows: this.buildRows(this.convRevGood, this.convRevBad, this.agroRevGood, this.agroRevBad, false, 0, this.oiComm, this.oiFund) },
+        { title: 'Conventional farming — with AA', type: 'conv', rows: this.buildRows(this.convRevGood, this.convRevBad, this.agroRevGood, this.agroRevBad, false, this.aaSupport, this.oiComm, this.oiFund) },
+        { title: 'Agroforestry — no AA',           type: 'agro', rows: this.buildRows(this.convRevGood, this.convRevBad, this.agroRevGood, this.agroRevBad, true, 0, this.oiComm, this.oiFund) },
+        { title: 'Agroforestry — with AA',         type: 'agro', rows: this.buildRows(this.convRevGood, this.convRevBad, this.agroRevGood, this.agroRevBad, true, this.aaSupport, this.oiComm, this.oiFund) },
+      ];
+    },
+
+    getBaselineState() {
+      return { landPct:0.20, agroYieldGood:60, agroYieldBad:20, cropYieldGood:100, cropYieldBad:0,
+               outsideIncome:10, outsideIncomePayer:'community', aaSupport:30, aaCostPct:40, aaPayer:'agency',
+               probBad: this.programProbBad[this.program], probFailure:0.22 };
+    },
+    getCurrentState() {
+      return { landPct:this.landPct, agroYieldGood:this.agroYieldGood, agroYieldBad:this.agroYieldBad,
+               cropYieldGood:this.cropYieldGood, cropYieldBad:this.cropYieldBad, outsideIncome:this.outsideIncome,
+               outsideIncomePayer:this.outsideIncomePayer, aaSupport:this.aaSupport, aaCostPct:this.aaCostPct, aaPayer:this.aaPayer,
+               probBad:this.probBad, probFailure:this.probFailure };
+    },
+    applyState(s) {
+      this.landPct=s.landPct; this.agroYieldGood=s.agroYieldGood; this.agroYieldBad=s.agroYieldBad;
+      this.cropYieldGood=s.cropYieldGood; this.cropYieldBad=s.cropYieldBad; this.outsideIncome=s.outsideIncome;
+      this.outsideIncomePayer=s.outsideIncomePayer; this.aaSupport=s.aaSupport; this.aaCostPct=s.aaCostPct; this.aaPayer=s.aaPayer;
+      this.probBad=s.probBad; this.probFailure=s.probFailure;
+    },
+    loadBase(which) {
+      this.activeBase = which;
+      if (which === 'baseline') {
+        this.applyState(this.getBaselineState());
+      } else if (which === 'A') {
+        if (this.savedA) this.applyState(this.savedA);
+        else alert('No saved state for Scenario A yet. Adjust sliders and click Save.');
+      } else if (which === 'B') {
+        if (this.savedB) this.applyState(this.savedB);
+        else alert('No saved state for Scenario B yet. Adjust sliders and click Save.');
+      }
+    },
+    saveScenario(which) {
+      const state = this.getCurrentState();
+      if (which === 'A') { 
+        this.savedA = state;
+      } else { 
+        this.savedB = state;
+      }
+    },
+    applyModifier(type) {
+      // First load the active base, then apply modifier on top
+      if (this.activeBase === 'baseline') this.applyState(this.getBaselineState());
+      else if (this.activeBase === 'A' && this.savedA) this.applyState(this.savedA);
+      else if (this.activeBase === 'B' && this.savedB) this.applyState(this.savedB);
+      if (type === 'climate') this.probBad = Math.min(0.95, this.programProbBad[this.program] + 0.15);
+      else if (type === 'aa') this.aaSupport = 70;
+      else if (type === 'land') this.landPct = 0.60;
+    },
+
+
+  }
+}
+</script>
+</body>
+</html>
