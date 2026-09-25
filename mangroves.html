@@ -245,7 +245,7 @@
 <header class="bg-blue-900 text-white p-6 rounded-xl shadow-lg">
 <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
 <div class="flex-1">
-<h1 @blur="ui.mainTitle = $event.target.innerText" class="text-3xl font-bold" contenteditable="true" x-text="ui.mainTitle">Climate Adaptation Strategy Sustainable Benefit Analysis (SBA)&nbsp;- Mangroves</h1>
+<h1 @blur="ui.mainTitle = $event.target.innerText" class="text-3xl font-bold" contenteditable="true" x-text="ui.mainTitle">Climate Adaptation Strategy Sustainable Benefit Analysis (SBA) - Mangroves</h1>
 <p @blur="ui.subTitle = $event.target.innerText" class="text-blue-200" contenteditable="true" x-text="ui.subTitle">Evaluation of the value and long-term sustainability of adaptation strategies such as mangrove planting in the context of climate change and support through Anticipatory Action. This tool compares the benefits generated for households under different climate scenarios and levels of external support, assuming that the initial investment required to implement the adaptation strategy has already been made.</p>
 </div>
 <div aria-label="View mode" class="bg-white/10 border border-white/30 rounded-lg p-1 flex gap-1 text-[11px] font-bold uppercase tracking-wider">
@@ -259,18 +259,18 @@
 <h3 @blur="ui.dashEvTitle = $event.target.innerText" class="text-sm uppercase font-semibold opacity-80" contenteditable="true" x-text="ui.dashEvTitle">DOES CLIMATE CHANGE ADAPTATION THROUGH MANGROVE PLANTING GENERATE A POSITIVE NET BENEFIT?</h3>
 <div class="text-3xl font-bold" contenteditable="true" x-text="evModern &gt; evTrad ? 'YES' : 'NO'">YES</div>
 <p class="text-xs">
-<span @blur="ui.dashEvLabelModern = $event.target.innerText" contenteditable="true" x-text="ui.dashEvLabelModern">Benefit Index with Adaptation and AA</span>: <span x-text="ui.currency + evModern.toFixed(1)">¤79.2</span> | 
-                    <span @blur="ui.dashEvLabelTrad = $event.target.innerText" contenteditable="true" x-text="ui.dashEvLabelTrad">Benefit Index without Adaptation or AA</span>: <span x-text="ui.currency + evTrad.toFixed(1)">¤67.0</span>
+<span @blur="ui.dashEvLabelModern = $event.target.innerText" contenteditable="true" x-text="ui.dashEvLabelModern">Benefit Index with Adaptation and AA</span>: <span x-text="ui.currency + evModern.toFixed(1)">¤89.6</span> | 
+                    <span @blur="ui.dashEvLabelTrad = $event.target.innerText" contenteditable="true" x-text="ui.dashEvLabelTrad">Benefit Index without Adaptation or AA</span>: <span x-text="ui.currency + evTrad.toFixed(1)">¤78.0</span>
 </p>
 <div class="grid grid-cols-2 gap-2 mt-3 text-white">
 <div :class="communityAdaptationEv &gt;= 0 ? 'bg-green-700' : 'subbox-negative'" class="rounded-md p-2 shadow-sm border border-white/30">
 <div @blur="ui.dashCommunitySubtotalTitle = $event.target.innerText" class="text-[10px] uppercase font-semibold opacity-90 leading-tight" contenteditable="true" x-text="ui.dashCommunitySubtotalTitle">IS THE ADAPTATION ACTION BENEFICIAL TO THE COMMUNITY?</div>
 <div class="text-lg font-bold leading-tight" contenteditable="true" x-text="communityAdaptationEv &gt;= 0 ? 'YES' : 'NO'">YES</div>
-<div class="text-[10px] font-mono" x-text="ui.currency + communityAdaptationEv.toFixed(1)">¤88.6</div>
+<div class="text-[10px] font-mono" x-text="ui.currency + communityAdaptationEv.toFixed(1)">¤104.6</div>
 </div>
 <div :class="agencyAdaptationEv &gt;= 0 ? 'bg-green-700' : 'subbox-negative'" class="rounded-md p-2 shadow-sm border border-white/30">
 <div @blur="ui.dashAgencySubtotalTitle = $event.target.innerText" class="text-[10px] uppercase font-semibold opacity-90 leading-tight" contenteditable="true" x-text="ui.dashAgencySubtotalTitle">RED CROSS FINANCIAL SUPPORT</div>
-<div class="text-lg font-bold leading-tight" x-text="ui.currency + Math.abs(agencyAdaptationEv).toFixed(1)">¤9.4</div>
+<div class="text-lg font-bold leading-tight" x-text="ui.currency + Math.abs(agencyAdaptationEv).toFixed(1)">¤15.0</div>
 <div class="text-[10px] font-semibold uppercase" x-show="agencyAdaptationEv &lt; 0">REQUIRED</div>
 </div>
 </div>
@@ -279,7 +279,7 @@
 <h3 @blur="ui.dashSurviveTitle = $event.target.innerText" class="text-sm uppercase font-semibold opacity-80" contenteditable="true" x-text="ui.dashSurviveTitle">IS MANGROVE PLANTING A SUSTAINABLE CLIMATE CHANGE ADAPTATION STRATEGY?</h3>
 <div class="text-3xl font-bold" x-text="survivalNet &gt;= 0 ? 'YES' : 'NO'">YES</div>
 <p class="text-xs">
-<span @blur="ui.dashSurviveLabel = $event.target.innerText" contenteditable="true" x-text="ui.dashSurviveLabel">Bad-Year Benefit with Adaptation and AA</span>: <span x-text="ui.currency + survivalNet.toFixed(1)">¤21.6</span>
+<span @blur="ui.dashSurviveLabel = $event.target.innerText" contenteditable="true" x-text="ui.dashSurviveLabel">Bad-Year Benefit with Adaptation and AA</span>: <span x-text="ui.currency + survivalNet.toFixed(1)">¤26.0</span>
 </p>
 </div>
 </div>
@@ -333,24 +333,29 @@
 <div class="compact-control-group compact-group-original space-y-2">
 <div @blur="ui.originalBlockTitle = $event.target.innerText" class="compact-group-title text-slate-800" contenteditable="true" x-text="ui.originalBlockTitle">Fishing revenue</div>
 <div class="compact-control-card"><div @blur="ui.baseLabel = $event.target.innerText" class="compact-control-title" contenteditable="true" x-text="ui.baseLabel">BASELINE FISHING INCOME IN A NORMAL YEAR</div><div class="relative mt-2"><span class="absolute left-3 top-2 text-slate-400 font-bold" x-text="ui.currency">¤</span><input class="w-full pl-7 p-2 border rounded-md bg-white font-bold text-blue-900" type="number" x-model.number="base"></div></div>
-<div class="compact-control-card"><div @blur="ui.baseBadLabel = $event.target.innerText.replace(':','')" class="compact-control-title" contenteditable="true" x-text="ui.baseBadLabel">FISHING INCOME DURING A BAD YEAR</div><div class="flex items-center gap-3 mt-2"><input class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer" max="1" min="0" step="0.01" type="range" x-model.number="baseBad"><span class="text-[10px] font-mono font-bold text-slate-500 w-8 text-right" x-text="baseBad.toFixed(2)">0.10</span><span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="`${ui.currency}${(baseBad * base).toFixed(1)}`">¤10.0</span></div></div>
+<div class="compact-control-card"><div @blur="ui.baseBadLabel = $event.target.innerText.replace(':','')" class="compact-control-title" contenteditable="true" x-text="ui.baseBadLabel">FISHING INCOME DURING A BAD YEAR</div><div class="flex items-center gap-3 mt-2"><input class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer" max="1" min="0" step="0.01" type="range" x-model.number="baseBad"><span class="text-[10px] font-mono font-bold text-slate-500 w-8 text-right" x-text="baseBad.toFixed(2)">0.00</span><span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="`${ui.currency}${(baseBad * base).toFixed(1)}`">¤0.0</span></div></div>
 </div>
 <div class="compact-control-group compact-group-agroforestry space-y-2">
-<div @blur="ui.agroforestryBlockTitle = $event.target.innerText" class="compact-group-title text-green-800" contenteditable="true" x-text="ui.agroforestryBlockTitle">Climate Change Adaptation Action:&nbsp;Mangrove Plantation&nbsp;</div>
+<div @blur="ui.agroforestryBlockTitle = $event.target.innerText" class="compact-group-title text-green-800" contenteditable="true" x-text="ui.agroforestryBlockTitle">Climate Change Adaptation Action: Mangrove Plantation </div>
 <template :key="c.key" x-for="c in compactParamControls.filter(x =&gt; ['seedCost','yieldBen','yieldBad'].includes(x.key))"><div class="compact-control-card"><div @blur="ui[c.uiKey] = $event.target.innerText.replace(':','')" class="compact-control-title" contenteditable="true" x-text="ui[c.uiKey]"></div><div class="flex items-center gap-3 mt-2"><input :max="c.max" :min="c.min" :step="c.step" class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer" type="range" x-model.number="params.find(p =&gt; p.key === c.key).val"><span class="text-[10px] font-mono font-bold text-slate-500 w-8 text-right" x-text="params.find(p =&gt; p.key === c.key).val.toFixed(2)"></span><span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="c.percent ? `${(params.find(p =&gt; p.key === c.key).val * 100).toFixed(0)}%` : `${ui.currency}${getVal(c.key).toFixed(1)}`"></span></div></div></template>
 </div>
 <div class="compact-control-group compact-group-outside space-y-2">
 <div @blur="ui.outsideBlockTitle = $event.target.innerText" class="compact-group-title text-blue-800" contenteditable="true" x-text="ui.outsideBlockTitle">Income from other sources</div>
 <template :key="c.key" x-for="c in compactParamControls.filter(x =&gt; ['savings'].includes(x.key))"><div class="compact-control-card"><div @blur="ui[c.uiKey] = $event.target.innerText.replace(':','')" class="compact-control-title" contenteditable="true" x-text="ui[c.uiKey]"></div><div class="flex items-center gap-3 mt-2"><input :max="c.max" :min="c.min" :step="c.step" class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer" type="range" x-model.number="params.find(p =&gt; p.key === c.key).val"><span class="text-[10px] font-mono font-bold text-slate-500 w-8 text-right" x-text="params.find(p =&gt; p.key === c.key).val.toFixed(2)"></span><span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="`${ui.currency}${getVal(c.key).toFixed(1)}`"></span></div></div></template>
+<div class="compact-control-card"><div @blur="ui.outsideAgencyFractionLabel = $event.target.innerText.replace(':','')" class="compact-control-title" contenteditable="true" x-text="ui.outsideAgencyFractionLabel">Fraction of outside income borne by agency</div><div class="flex items-center gap-3 mt-2"><input class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer" max="1" min="0" step="0.01" type="range" x-model.number="outsideIncomeAgencyFraction"><span class="text-[10px] font-mono font-bold text-slate-500 w-8 text-right" x-text="outsideIncomeAgencyFraction.toFixed(2)"></span><span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="`${ui.currency}${(outsideIncomeAgencyFraction * getVal('savings')).toFixed(1)}`"></span></div></div>
 
 </div>
 <div class="compact-control-group compact-group-probability space-y-2">
 <div @blur="ui.badYearProbBlockTitle = $event.target.innerText" class="compact-group-title text-yellow-900" contenteditable="true" x-text="ui.badYearProbBlockTitle">Bad-Year probability in an evolving risk environment</div>
 <div class="compact-control-card"><div @blur="ui.probBadLabel = $event.target.innerText" class="compact-control-title" contenteditable="true" x-text="ui.probBadLabel">Bad-Year Probability</div><div class="flex items-center gap-3 mt-2"><input class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer" max="1" min="0" step="0.01" type="range" x-model.number="probBad"><span class="text-[10px] font-mono font-bold text-slate-500 w-8 text-right" x-text="probBad.toFixed(2)">0.40</span><span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="`${(probBad * 100).toFixed(0)}%`">40%</span></div></div>
+<div class="compact-control-card"><div @blur="ui.probBasisLabel = $event.target.innerText" class="compact-control-title" contenteditable="true" x-text="ui.probBasisLabel">AA TRIGGER FAILURE RATE</div><div class="flex items-center gap-3 mt-2"><input class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer" max="1" min="0" step="0.01" type="range" x-model.number="probBasis"><span class="text-[10px] font-mono font-bold text-slate-500 w-8 text-right" x-text="probBasis.toFixed(2)"></span><span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="`${(probBasis * 100).toFixed(0)}%`"></span></div></div>
 </div>
 <div class="compact-control-group compact-group-aa space-y-2">
 <div @blur="ui.supportBlockTitle = $event.target.innerText" class="compact-group-title text-purple-900" contenteditable="true" x-text="ui.supportBlockTitle">Anticipatory Action support during bad years</div>
 <template :key="c.key" x-for="c in compactParamControls.filter(x =&gt; ['cover','loading'].includes(x.key))"><div class="compact-control-card"><div @blur="ui[c.uiKey] = $event.target.innerText.replace(':','')" class="compact-control-title" contenteditable="true" x-text="ui[c.uiKey]"></div><div class="flex items-center gap-3 mt-2"><input :max="c.max" :min="c.min" :step="c.step" class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer" type="range" x-model.number="params.find(p =&gt; p.key === c.key).val"><span class="text-[10px] font-mono font-bold text-slate-500 w-8 text-right" x-text="params.find(p =&gt; p.key === c.key).val.toFixed(2)"></span><span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="c.percent ? `${(params.find(p =&gt; p.key === c.key).val * 100).toFixed(0)}%` : `${ui.currency}${getVal(c.key).toFixed(1)}`"></span></div></div></template>
+<div class="compact-control-card"><div @blur="ui.aaSupportAgencyFractionLabel = $event.target.innerText.replace(':','')" class="compact-control-title" contenteditable="true" x-text="ui.aaSupportAgencyFractionLabel">RED CROSS SHARE OF AA SUPPORT COSTS</div><div class="flex items-center gap-3 mt-2"><input class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer" max="1" min="0" step="0.01" type="range" x-model.number="aaSupportAgencyFraction"><span class="text-[10px] font-mono font-bold text-slate-500 w-8 text-right" x-text="aaSupportAgencyFraction.toFixed(2)"></span><span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="`${ui.currency}${(aaSupportAgencyFraction * premium).toFixed(1)}`"></span></div></div>
+
+
 
 
 </div>
@@ -361,18 +366,18 @@
 <h3 @blur="ui.dashEvTitle = $event.target.innerText" class="text-[10px] uppercase font-semibold opacity-80 leading-tight" contenteditable="true" x-text="ui.dashEvTitle">DOES CLIMATE CHANGE ADAPTATION THROUGH MANGROVE PLANTING GENERATE A POSITIVE NET BENEFIT?</h3>
 <div class="text-lg font-bold leading-tight" x-text="evModern &gt; evTrad ? 'YES' : 'NO'">YES</div>
 <p class="text-[10px] leading-tight">
-<span @blur="ui.dashEvLabelModern = $event.target.innerText" contenteditable="true" x-text="ui.dashEvLabelModern">Benefit Index with Adaptation and AA</span>: <span x-text="ui.currency + evModern.toFixed(1)">¤79.2</span> | 
-                                <span @blur="ui.dashEvLabelTrad = $event.target.innerText" contenteditable="true" x-text="ui.dashEvLabelTrad">Benefit Index without Adaptation or AA</span>: <span x-text="ui.currency + evTrad.toFixed(1)">¤67.0</span>
+<span @blur="ui.dashEvLabelModern = $event.target.innerText" contenteditable="true" x-text="ui.dashEvLabelModern">Benefit Index with Adaptation and AA</span>: <span x-text="ui.currency + evModern.toFixed(1)">¤89.6</span> | 
+                                <span @blur="ui.dashEvLabelTrad = $event.target.innerText" contenteditable="true" x-text="ui.dashEvLabelTrad">Benefit Index without Adaptation or AA</span>: <span x-text="ui.currency + evTrad.toFixed(1)">¤78.0</span>
 </p>
 <div class="grid grid-cols-2 gap-1 mt-2 text-white">
 <div :class="communityAdaptationEv &gt;= 0 ? 'bg-green-700' : 'subbox-negative'" class="rounded-md p-1 shadow-sm border border-white/30">
 <div @blur="ui.dashCommunitySubtotalTitle = $event.target.innerText" class="text-[9px] uppercase font-semibold opacity-90 leading-tight" contenteditable="true" x-text="ui.dashCommunitySubtotalTitle">IS THE ADAPTATION ACTION BENEFICIAL TO THE COMMUNITY?</div>
 <div class="text-xs font-bold leading-tight" x-text="communityAdaptationEv &gt;= 0 ? 'YES' : 'NO'">YES</div>
-<div class="text-[9px] font-mono" x-text="ui.currency + communityAdaptationEv.toFixed(1)">¤88.6</div>
+<div class="text-[9px] font-mono" x-text="ui.currency + communityAdaptationEv.toFixed(1)">¤104.6</div>
 </div>
 <div :class="agencyAdaptationEv &gt;= 0 ? 'bg-green-700' : 'subbox-negative'" class="rounded-md p-1 shadow-sm border border-white/30">
 <div @blur="ui.dashAgencySubtotalTitle = $event.target.innerText" class="text-[9px] uppercase font-semibold opacity-90 leading-tight" contenteditable="true" x-text="ui.dashAgencySubtotalTitle">RED CROSS FINANCIAL SUPPORT</div>
-<div class="text-xs font-bold leading-tight" x-text="ui.currency + Math.abs(agencyAdaptationEv).toFixed(1)">¤9.4</div>
+<div class="text-xs font-bold leading-tight" x-text="ui.currency + Math.abs(agencyAdaptationEv).toFixed(1)">¤15.0</div>
 <div class="text-[9px] font-semibold uppercase" x-show="agencyAdaptationEv &lt; 0">REQUIRED</div>
 </div>
 </div>
@@ -381,7 +386,7 @@
 <h3 @blur="ui.dashSurviveTitle = $event.target.innerText" class="text-[10px] uppercase font-semibold opacity-80 leading-tight" contenteditable="true" x-text="ui.dashSurviveTitle">IS MANGROVE PLANTING A SUSTAINABLE CLIMATE CHANGE ADAPTATION STRATEGY?</h3>
 <div class="text-lg font-bold leading-tight" x-text="survivalNet &gt;= 0 ? 'YES' : 'NO'">YES</div>
 <p class="text-[10px] leading-tight">
-<span @blur="ui.dashSurviveLabel = $event.target.innerText" contenteditable="true" x-text="ui.dashSurviveLabel">Bad-Year Benefit with Adaptation and AA</span>: <span x-text="ui.currency + survivalNet.toFixed(1)">¤21.6</span>
+<span @blur="ui.dashSurviveLabel = $event.target.innerText" contenteditable="true" x-text="ui.dashSurviveLabel">Bad-Year Benefit with Adaptation and AA</span>: <span x-text="ui.currency + survivalNet.toFixed(1)">¤26.0</span>
 </p>
 </div>
 </div>
@@ -431,8 +436,8 @@
 <div @blur="ui.baseBadLabel = $event.target.innerText.replace(':','')" class="text-xs font-bold text-slate-700 uppercase tracking-wide" contenteditable="true" x-text="ui.baseBadLabel">FISHING INCOME DURING A BAD YEAR</div>
 <div class="flex items-center gap-3">
 <input class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer" max="1" min="0" step="0.01" type="range" x-model.number="baseBad">
-<span class="text-[10px] font-mono font-bold text-slate-400 w-8 text-right" x-text="baseBad.toFixed(2)">0.10</span>
-<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="`${ui.currency}${(baseBad * base).toFixed(1)}`">¤10.0</span>
+<span class="text-[10px] font-mono font-bold text-slate-400 w-8 text-right" x-text="baseBad.toFixed(2)">0.00</span>
+<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="`${ui.currency}${(baseBad * base).toFixed(1)}`">¤0.0</span>
 </div>
 </div>
 </div>
@@ -440,8 +445,8 @@
 </div>
 <div class="control-divider control-group agroforestry-group">
 <div class="slider-note mb-4">
-<div @blur="ui.agroforestryBlockTitle = $event.target.innerText" class="slider-note-title" contenteditable="true" x-text="ui.agroforestryBlockTitle">Climate Change Adaptation Action:&nbsp;Mangrove Plantation&nbsp;</div>
-<div @blur="ui.agroforestryBlockText = $event.target.innerText" class="slider-note-text" contenteditable="true" x-text="ui.agroforestryBlockText">Set the cost of&nbsp;mangrove planting and upkeep, as well as the additional benefits generated by mangroves during normal years and bad years. The adaptation investment represents the initial investment required to implement the adaptation action. The additional benefits correspond to the extra income or advantages that mangroves provide to the household during both favorable years and bad years. Adjust these parameters to reflect the expected effects of mangroves on household livelihoods under different climate conditions.</div>
+<div @blur="ui.agroforestryBlockTitle = $event.target.innerText" class="slider-note-title" contenteditable="true" x-text="ui.agroforestryBlockTitle">Climate Change Adaptation Action: Mangrove Plantation </div>
+<div @blur="ui.agroforestryBlockText = $event.target.innerText" class="slider-note-text" contenteditable="true" x-text="ui.agroforestryBlockText">Set the cost of mangrove planting and upkeep, as well as the additional benefits generated by mangroves during normal years and bad years. The adaptation investment represents the initial investment required to implement the adaptation action. The additional benefits correspond to the extra income or advantages that mangroves provide to the household during both favorable years and bad years. Adjust these parameters to reflect the expected effects of mangroves on household livelihoods under different climate conditions.</div>
 </div>
 <div class="space-y-4">
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
@@ -460,11 +465,11 @@
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
 <div class="slider-note">
-<div @blur="ui.yieldBen = $event.target.innerText.replace(':','')" class="slider-note-title" contenteditable="true" x-text="ui.yieldBen">MANGROVE&nbsp;BENEFIT (FAVORABLE YEAR)</div>
+<div @blur="ui.yieldBen = $event.target.innerText.replace(':','')" class="slider-note-title" contenteditable="true" x-text="ui.yieldBen">MANGROVE BENEFIT (FAVORABLE YEAR)</div>
 <div @blur="ui.yieldBenHelp = $event.target.innerText" class="slider-note-text" contenteditable="true" spellcheck="false" x-text="ui.yieldBenHelp">During a normal to favorable year, healthy mangroves contribute to sustaining larger fish populations and more stable fishing conditions. This parameter represents the additional benefit that the mangrove ecosystem provides to the household’s regular income from fishing and aquaculture. This value is expressed as a multiplier of the household’s baseline fishing income. Adjust this parameter to reflect the benefits that the household typically derives from mangroves during a favorable year.</div>
 </div>
 <div class="space-y-2">
-<div @blur="ui.yieldBen = $event.target.innerText.replace(':','')" class="text-xs font-bold text-slate-700 uppercase tracking-wide" contenteditable="true" x-text="ui.yieldBen">MANGROVE&nbsp;BENEFIT (FAVORABLE YEAR)</div>
+<div @blur="ui.yieldBen = $event.target.innerText.replace(':','')" class="text-xs font-bold text-slate-700 uppercase tracking-wide" contenteditable="true" x-text="ui.yieldBen">MANGROVE BENEFIT (FAVORABLE YEAR)</div>
 <div class="flex items-center gap-3">
 <input class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer" max="2" min="1" step="0.1" type="range" x-model.number="params.find(p =&gt; p.key === 'yieldBen').val">
 <span class="text-[10px] font-mono font-bold text-slate-400 w-8 text-right" x-text="params.find(p =&gt; p.key === 'yieldBen').val.toFixed(2)">1.40</span>
@@ -505,8 +510,8 @@ Adjust this parameter to reflect the income and livelihood benefits that mangrov
 <div @blur="ui.savings = $event.target.innerText.replace(':','')" class="text-xs font-bold text-slate-700 uppercase tracking-wide" contenteditable="true" x-text="ui.savings">Other Income</div>
 <div class="flex items-center gap-3">
 <input class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer" max="1" min="0" step="0.01" type="range" x-model.number="params.find(p =&gt; p.key === 'savings').val">
-<span class="text-[10px] font-mono font-bold text-slate-400 w-8 text-right" x-text="params.find(p =&gt; p.key === 'savings').val.toFixed(2)">0.04</span>
-<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="`${ui.currency}${getVal('savings').toFixed(1)}`">¤4.0</span>
+<span class="text-[10px] font-mono font-bold text-slate-400 w-8 text-right" x-text="params.find(p =&gt; p.key === 'savings').val.toFixed(2)">0.24</span>
+<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="`${ui.currency}${getVal('savings').toFixed(1)}`">¤24.0</span>
 </div>
 </div>
 </div>
@@ -519,8 +524,8 @@ Adjust this parameter to reflect the income and livelihood benefits that mangrov
 <div @blur="ui.outsideAgencyFractionLabel = $event.target.innerText.replace(':','')" class="text-xs font-bold text-slate-700 uppercase tracking-wide" contenteditable="true" x-text="ui.outsideAgencyFractionLabel">Fraction of outside income borne by agency</div>
 <div class="flex items-center gap-3">
 <input class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer" max="1" min="0" step="0.01" type="range" x-model.number="outsideIncomeAgencyFraction">
-<span class="text-[10px] font-mono font-bold text-slate-400 w-8 text-right" x-text="outsideIncomeAgencyFraction.toFixed(2)">0.26</span>
-<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="`${ui.currency}${(outsideIncomeAgencyFraction * getVal('savings')).toFixed(1)}`">¤1.0</span>
+<span class="text-[10px] font-mono font-bold text-slate-400 w-8 text-right" x-text="outsideIncomeAgencyFraction.toFixed(2)">0.25</span>
+<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="`${ui.currency}${(outsideIncomeAgencyFraction * getVal('savings')).toFixed(1)}`">¤6.0</span>
 </div>
 </div>
 </div>
@@ -591,8 +596,8 @@ Adjust this parameter to reflect the income and livelihood benefits that mangrov
 <div @blur="ui.loading = $event.target.innerText.replace(':','')" class="text-xs font-bold text-slate-700 uppercase tracking-wide" contenteditable="true" x-text="ui.loading">AA SUPPORT OVERHEADS</div>
 <div class="flex items-center gap-3">
 <input class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer" max="1" min="0" step="0.01" type="range" x-model.number="params.find(p =&gt; p.key === 'loading').val">
-<span class="text-[10px] font-mono font-bold text-slate-400 w-8 text-right" x-text="params.find(p =&gt; p.key === 'loading').val.toFixed(2)">0.05</span>
-<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="`${(params.find(p =&gt; p.key === 'loading').val * 100).toFixed(0)}%`">5%</span>
+<span class="text-[10px] font-mono font-bold text-slate-400 w-8 text-right" x-text="params.find(p =&gt; p.key === 'loading').val.toFixed(2)">0.13</span>
+<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="`${(params.find(p =&gt; p.key === 'loading').val * 100).toFixed(0)}%`">13%</span>
 </div>
 </div>
 </div>
@@ -606,7 +611,7 @@ Adjust this parameter to reflect the income and livelihood benefits that mangrov
 <div class="flex items-center gap-3">
 <input class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer" max="1" min="0" step="0.01" type="range" x-model.number="aaSupportAgencyFraction">
 <span class="text-[10px] font-mono font-bold text-slate-400 w-8 text-right" x-text="aaSupportAgencyFraction.toFixed(2)">1.00</span>
-<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="`${ui.currency}${(aaSupportAgencyFraction * premium).toFixed(1)}`">¤8.4</span>
+<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold" x-text="`${ui.currency}${(aaSupportAgencyFraction * premium).toFixed(1)}`">¤9.0</span>
 </div>
 </div>
 </div>
@@ -614,7 +619,7 @@ Adjust this parameter to reflect the income and livelihood benefits that mangrov
 <div class="pt-4">
 <div class="rounded-xl border-2 p-4 text-center shadow-sm" style="background-color:#fefce8; border-color:#fde68a;">
 <div @blur="ui.bannerTitle = $event.target.innerText" class="text-xs font-bold uppercase tracking-widest mb-1" contenteditable="true" x-text="ui.bannerTitle">TOTAL COST OF AA SUPPORT TO THE RED CROSS</div>
-<div class="text-3xl font-black" x-text="`${ui.currency}${premium.toFixed(1)}`">¤8.4</div>
+<div class="text-3xl font-black" x-text="`${ui.currency}${premium.toFixed(1)}`">¤9.0</div>
 <div @blur="ui.bannerHelp = $event.target.innerText" class="text-[11px] text-slate-600 mt-1" contenteditable="true" x-text="ui.bannerHelp">Calculated total AA support costs based on monetary value of the support provided, bad-year probability, and overhead.</div>
 </div>
 </div>
@@ -654,10 +659,10 @@ Adjust this parameter to reflect the income and livelihood benefits that mangrov
 <h4 @blur="if (bm.titleKey) ui[bm.titleKey] = $event.target.innerText; bm.title = $event.target.innerText" class="bg-slate-800 text-white px-3 py-1 text-[11px] font-bold mb-3 rounded" contenteditable="true" x-text="bm.title"></h4>
 <table class="w-full text-[10px] table-compact leading-tight">
 <thead><tr class="text-slate-500 border-b">
-<th @blur="ui.thItem = $event.target.innerText" contenteditable="true" x-text="ui.thItem"></th>
-<th @blur="ui.thGood = $event.target.innerText" contenteditable="true" x-text="ui.thGood"></th>
-<th @blur="ui.thBad = $event.target.innerText" contenteditable="true" x-text="ui.thBad"></th>
-<th @blur="ui.thBasis = $event.target.innerText" contenteditable="true" x-text="ui.thBasis"></th>
+<th @blur="ui.thItem = $event.target.innerText" contenteditable="true" x-text="ui.thItem">Item</th>
+<th @blur="ui.thGood = $event.target.innerText" contenteditable="true" x-text="ui.thGood">Benefit Index - Normal Year</th>
+<th @blur="ui.thBad = $event.target.innerText" contenteditable="true" x-text="ui.thBad">Benefit Index - Bad Year</th>
+<th @blur="ui.thBasis = $event.target.innerText" contenteditable="true" x-text="ui.thBasis">AA Failure Index</th>
 </tr></thead>
 <tbody>
 <template :key="row.id" x-for="row in bm.rows">
@@ -680,7 +685,7 @@ Adjust this parameter to reflect the income and livelihood benefits that mangrov
 <button @click="gameOpen = false" class="absolute top-4 right-4 text-3xl font-bold z-10">×</button>
 <div class="p-4 bg-slate-50 border-b flex justify-between items-center">
 <h2 class="text-lg font-bold text-blue-900 uppercase tracking-tight">
-<span @blur="ui.simRoundLabel = $event.target.innerText" contenteditable="true" x-text="ui.simRoundLabel">Simulation Mode</span> <span x-text="gameTab">3</span>
+<span @blur="ui.simRoundLabel = $event.target.innerText" contenteditable="true" x-text="ui.simRoundLabel">Simulation Mode</span> <span x-text="gameTab">1</span>
 </h2>
 </div>
 <div class="flex flex-1 overflow-hidden">
@@ -717,7 +722,9 @@ Adjust this parameter to reflect the income and livelihood benefits that mangrov
 </label>
 </div>
 </div>
-</template>
+</template><div>
+
+</div>
 <div class="pt-4 border-t mt-auto">
 <button @click="playSeason()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg shadow uppercase" x-text="ui.simBtnPlay">RUN SEASON</button>
 <div class="text-center mt-2 font-bold text-blue-900 text-[10px]">
